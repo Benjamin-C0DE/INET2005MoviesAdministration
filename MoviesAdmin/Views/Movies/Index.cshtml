@@ -1,0 +1,71 @@
+@model IEnumerable<MoviesAdmin.Models.Movie>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>List of movies</h1>
+<h2 class="mb-3">Movie Administration</h2>
+<p class="text-muted">Manage your movie database — add, edit, or remove entries.</p>
+
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Add New Movie</a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thead>
+    
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Synopsis)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Genre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+            <th>
+                Runtime (Min)
+            </th>
+            <th>
+                Release Date
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Synopsis)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Genre)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Rating)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.RuntimeMinutes)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ReleaseDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Edit</a>        <!--Edit button using Bootstrap classes for styling -->
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>     <!-- Details button using Bootstrap classes for styling -->
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>     <!-- Delete button using Bootstrap classes for styling -->
+            </td>
+        </tr>
+}
+    </tbody>
+</>

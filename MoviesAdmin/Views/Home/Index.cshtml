@@ -1,8 +1,30 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+
+    string name = "Ben";
+    bool showMessage = true;
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to my app</h1>
+    <h1 class="display-4">Welcome to my Movie app</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<p>
+    <!---Hello @name!-->
+    <br />
+    @if (showMessage)
+    {
+        <span> This is my first ASP.NET Core MVC Web app.</span>
+    }
+    else
+    {
+        <span>Nothing to say.</span>
+    }
+</p>
+
+<h2>Home Page</h2>
+
+<ul>
+    <!--<li><a href="/Home/MovieJson">View Movie JSON</a></li>-->
+</ul>

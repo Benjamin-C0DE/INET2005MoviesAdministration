@@ -1,7 +1,15 @@
+using MoviesAdmin.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add the MoviesAdminContext to the services container and configure it to use SQL Server with the connection string from appsettings.json
+builder.Services.AddDbContext<MoviesAdminContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MoviesAdminContext")));
+
 
 var app = builder.Build();
 
@@ -24,6 +32,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
 
 
 app.Run();
