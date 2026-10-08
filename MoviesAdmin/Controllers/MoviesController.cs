@@ -35,7 +35,7 @@ public class MoviesController : Controller
         return View(movies);
     }
 
-    // GET: MOVIES/Details/5
+    // GET: MOVIES/Details
     public async Task<IActionResult> Details(int? id)   // Action to show details for a single movie
     {
         if (id == null)                                 // If no id provided
@@ -75,7 +75,7 @@ public class MoviesController : Controller
         return View(movie);                            // Re-render the Create view with validation messages
     }
 
-    // GET: MOVIES/Edit/5
+    // GET: MOVIES/Edit
     public async Task<IActionResult> Edit(int? id)          // GET action to render the Edit form for a movie
     {
         if (id == null)                                     // If no id provided
@@ -92,7 +92,7 @@ public class MoviesController : Controller
         return View(movie);                                 // Render the Edit view with the movie model
     }
 
-    // POST: MOVIES/Edit/5
+    // POST: MOVIES/Edit
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,Synopsis,Genre,Rating,RuntimeMinutes,ReleaseDate")] Movie movie)
@@ -126,7 +126,7 @@ public class MoviesController : Controller
         return View(movie);                             // Re-render Edit view with validation messages
     }
 
-    // GET: MOVIES/Delete/5
+    // GET: MOVIES/Delete
     public async Task<IActionResult> Delete(int? id) // GET action to confirm deletion of a movie
     {
         if (id == null)                                     // If no id provided
@@ -144,7 +144,7 @@ public class MoviesController : Controller
         return View(movie);                            // Render Delete confirmation view     
     }
 
-    // POST: MOVIES/Delete/5                                    
+    // POST: MOVIES/Delete                                   
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)       // POST action that performs the deletion

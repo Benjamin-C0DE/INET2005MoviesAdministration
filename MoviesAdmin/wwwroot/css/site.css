@@ -36,6 +36,9 @@ body {
     font-weight: 700;
     color: lightseagreen !important; /*Colour*/
 }
+.navbar {
+    background-color: lightgray !important; /* BG Colour*/
+}
 
 /* Section headers */
 h2 {
