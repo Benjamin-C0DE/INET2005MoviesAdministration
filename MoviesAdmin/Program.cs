@@ -1,5 +1,6 @@
-using MoviesAdmin.Models;
 using Microsoft.EntityFrameworkCore;
+using MoviesAdmin.Models;
+using MoviesAdmin.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,9 @@ builder.Services.AddControllersWithViews();
 // Add the MoviesAdminContext to the services container and configure it to use SQL Server with the connection string from appsettings.json
 builder.Services.AddDbContext<MoviesAdminContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MoviesAdminContext")));
+
+// Add the AzureBlobService to the services container
+builder.Services.AddScoped<IAzureBlobService, AzureBlobService>();
 
 
 var app = builder.Build();

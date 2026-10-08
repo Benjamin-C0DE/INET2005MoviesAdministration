@@ -2,14 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesAdmin.Models;
+using MoviesAdmin.Services;
 
 public class MoviesController : Controller
 {
     private readonly MoviesAdminContext _context;
+    private readonly IAzureBlobService _blobService; // Dependency injection for Azure Blob Service
 
-    public MoviesController(MoviesAdminContext context)
+    public MoviesController(MoviesAdminContext context, IAzureBlobService blobService)
     {
         _context = context;
+        _blobService = blobService; // Initializes the Azure Blob Service
     }
 
     // MPAA
@@ -35,7 +38,7 @@ public class MoviesController : Controller
         return View(movies);
     }
 
-    // GET: MOVIES/Details/5
+    // GET: MOVIES/Details
     public async Task<IActionResult> Details(int? id)   // Action to show details for a single movie
     {
         if (id == null)                                 // If no id provided
@@ -63,8 +66,15 @@ public class MoviesController : Controller
     // POST: MOVIES/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Title,Synopsis,Genre,Rating,RuntimeMinutes,ReleaseDate")] Movie movie)
+    public async Task<IActionResult> Create(Movie movie, IFormFile posterFile) // Modiied to accept poster file upload
     {
+        // Handles poster file upload if provided
+        if (posterFile != null)
+        {
+            string filename = Guid.NewGuid() + Path.GetExtension(posterFile.FileName);
+            movie.PosterUrl = await _blobService.UploadFileAsync(posterFile, filename);
+        }
+
         if (ModelState.IsValid) // Server-side validation check
         {
             _context.Add(movie);                        // Add new movie entity to the DbContext
@@ -75,7 +85,7 @@ public class MoviesController : Controller
         return View(movie);                            // Re-render the Create view with validation messages
     }
 
-    // GET: MOVIES/Edit/5
+    // GET: MOVIES/Edit
     public async Task<IActionResult> Edit(int? id)          // GET action to render the Edit form for a movie
     {
         if (id == null)                                     // If no id provided
@@ -92,14 +102,21 @@ public class MoviesController : Controller
         return View(movie);                                 // Render the Edit view with the movie model
     }
 
-    // POST: MOVIES/Edit/5
+    // POST: MOVIES/Edit
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,Synopsis,Genre,Rating,RuntimeMinutes,ReleaseDate")] Movie movie)
+    public async Task<IActionResult> Edit(int? id, Movie movie, IFormFile posterFile) // changed to work with poster file upload
     {
         if (id != movie.Id)                                 // Ensure route id matches model id
         {
             return NotFound();                              // Return 404 if mismatch
+        }
+
+        // If a new poster file was uploaded, replace the old one
+        if (posterFile != null)
+        {
+            string filename = Guid.NewGuid() + Path.GetExtension(posterFile.FileName);
+            movie.PosterUrl = await _blobService.UploadFileAsync(posterFile, filename);
         }
 
         if (ModelState.IsValid)                            // Server-side validation
@@ -126,7 +143,7 @@ public class MoviesController : Controller
         return View(movie);                             // Re-render Edit view with validation messages
     }
 
-    // GET: MOVIES/Delete/5
+    // GET: MOVIES/Delete
     public async Task<IActionResult> Delete(int? id) // GET action to confirm deletion of a movie
     {
         if (id == null)                                     // If no id provided
@@ -144,7 +161,7 @@ public class MoviesController : Controller
         return View(movie);                            // Render Delete confirmation view     
     }
 
-    // POST: MOVIES/Delete/5                                    
+    // POST: MOVIES/Delete                                   
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)       // POST action that performs the deletion
