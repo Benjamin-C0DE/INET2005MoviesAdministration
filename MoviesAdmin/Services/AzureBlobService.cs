@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -16,15 +17,26 @@ namespace MoviesAdmin.Services
         {
             _configuration = configuration;
 
-            containerName = _configuration["AZ_STORAGE_CONTAINER_NAME"];
-            string connectionString = _configuration.GetConnectionString("AZ_STORAGE_CONNECTION_STRING");
+            containerName = _configuration["AzureStorage:ContainerName"]
+                ?? throw new InvalidOperationException("Missing configuration: AzureStorage:ContainerName");
 
+            string connectionString = _configuration["AzureStorage:ConnectionString"]
+                ?? throw new InvalidOperationException("Missing configuration: AzureStorage:ConnectionString");
+            
             _blobServiceClient = new BlobServiceClient(connectionString);
         }
         public async Task<string> UploadFileAsync(IFormFile file, string filename)
         {
             var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
             var blobClient = containerClient.GetBlobClient(filename);
+
+            var options = new BlobUploadOptions
+            {
+                HttpHeaders = new BlobHttpHeaders34
+                {
+                    ContentType = file.ContentType
+                }
+            };
 
             using var stream = file.OpenReadStream();
             await blobClient.UploadAsync(stream, overwrite: true);

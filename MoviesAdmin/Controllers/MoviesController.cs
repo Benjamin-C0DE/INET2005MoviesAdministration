@@ -66,7 +66,7 @@ public class MoviesController : Controller
     // POST: MOVIES/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Movie movie, IFormFile posterFile) // Modiied to accept poster file upload
+    public async Task<IActionResult> Create(Movie movie, IFormFile posterFile) // Poster file upload is handled via IFormFile parameter
     {
         // Handles poster file upload if provided
         if (posterFile != null)
@@ -105,7 +105,7 @@ public class MoviesController : Controller
     // POST: MOVIES/Edit
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, Movie movie, IFormFile posterFile) // changed to work with poster file upload
+    public async Task<IActionResult> Edit(int? id, Movie movie, IFormFile posterFile) // poster file upload is handled via IFormFile parameter
     {
         if (id != movie.Id)                                 // Ensure route id matches model id
         {
