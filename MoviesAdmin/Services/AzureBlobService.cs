@@ -32,7 +32,7 @@ namespace MoviesAdmin.Services
 
             var options = new BlobUploadOptions
             {
-                HttpHeaders = new BlobHttpHeaders34
+                HttpHeaders = new BlobHttpHeaders
                 {
                     ContentType = file.ContentType
                 }

@@ -1,7 +1,7 @@
 @model MoviesAdmin.Models.Movie
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editing This Movie";
 }
 
 <h1>Edit</h1>
@@ -10,43 +10,44 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data"> <!-- Changed to include file upload for poster -->
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="PosterUrl" /> <!--added to save existing PosterURl-->
 
             <div class="form-group mb-3">
-                <label asp-for="Title" class="control-label"></label>
+                <label asp-for="Title" class="control-label mb-2"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="Synopsis" class="control-label"></label>
+                <label asp-for="Synopsis" class="control-label mb-2"></label>
                 <input asp-for="Synopsis" class="form-control" />
                 <span asp-validation-for="Synopsis" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="Genre" class="control-label"></label>
-                <input asp-for="Genre" class="form-control" />
-                <span asp-validation-for="Genre" class="text-danger"></span>
+                <label asp-for="GenreId" class="control-label mb-2">Genre</label>
+                <select asp-for="GenreId" class="form-control" asp-items="ViewBag.GenreId"></select> <!--Genre Listed a a dropp down-->
+                <span asp-validation-for="GenreId" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="Rating" class="control-label"></label>
-                <select asp-for="Rating" class="form-control" asp-items="@(new SelectList(ViewBag.Ratings))"></select> <!-- Dropdown list for MPAA ratings (G, PG, PG‑13, R, NC‑17) -->
-                <span asp-validation-for="Rating" class="text-danger"></span>
+                <label asp-for="AudienceRatingId" class="control-label mb-2">Rating</label>
+                <select asp-for="AudienceRatingId" class="form-control" asp-items="ViewBag.AudienceRatingId"></select> <!-- Dropdown, updated using the AudienceRatingId -->
+                <span asp-validation-for="AudienceRatingId" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="RuntimeMinutes" class="control-label">Runtime (Min)</label>
+                <label asp-for="RuntimeMinutes" class="control-label mb-2">Runtime (Min)</label>
                 <input asp-for="RuntimeMinutes" class="form-control" min="1" /> <!-- Prevents negative runtime values by enforcing a minimum of 1 minute -->
                 <span asp-validation-for="RuntimeMinutes" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="ReleaseDate" class="control-label">Release Date</label>
+                <label asp-for="ReleaseDate" class="control-label mb-2">Release Date</label>
                 <input asp-for="ReleaseDate" class="form-control" /> <!-- Date input for movie release date (validated to not be in the future) -->
                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
             </div>
             <!--For poster-->
             <div class="form-group mb-3">
-                <label>Poster</label>
+                <label class="mb-2">Poster</label>
                 <input type="file" name="posterFile" class="form-control" />
             </div>
             
@@ -58,7 +59,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-success">Back to List </a>
 </div>
 
 @section Scripts {

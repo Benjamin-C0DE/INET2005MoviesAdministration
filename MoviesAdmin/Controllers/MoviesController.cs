@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesAdmin.Models;
 using MoviesAdmin.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class MoviesController : Controller
 {
@@ -15,23 +16,12 @@ public class MoviesController : Controller
         _blobService = blobService; // Initializes the Azure Blob Service
     }
 
-    // MPAA
-    private List<string> GetRatings()       // Helper method that returns the allowed MPAA rating options
-    {
-        return new List<string>             // Returns in-memory list of the MPAA rating as strings
-        {
-            "G",
-            "PG",
-            "PG-13",
-            "R",
-            "NC-17"
-        };
-    }
-
     // GET: MOVIES
     public async Task<IActionResult> Index()            // Action that returns the list view of all movies
     {
         var movies = await _context.Movie
+            .Include(m => m.Genre)                // Include the Genre navigation property
+            .Include(m => m.AudienceRating)        // Include the AudienceRating navigation property
             .OrderByDescending(m => m.ReleaseDate)      // Sort movies newest first by ReleaseDate
             .ToListAsync();
 
@@ -47,6 +37,8 @@ public class MoviesController : Controller
         }
 
         var movie = await _context.Movie            // Query for the movie with the given id
+            .Include(m => m.Genre)          //Display Genre on delete screen             
+            .Include(m => m.AudienceRating)//Display Rating on delete screen
             .FirstOrDefaultAsync(m => m.Id == id);
         if (movie == null)                          // If movie not found
         {
@@ -59,14 +51,16 @@ public class MoviesController : Controller
     // GET: MOVIES/Create
     public IActionResult Create()               // GET action to render the Create form
     {
-        ViewBag.Ratings = GetRatings();         // Provide rating options to the view via ViewBag
+        ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(g => g.Title), "Id", "Title"); // Populate genres for dropdown. Alphabetically
+        
+        ViewData["AudienceRatingId"] = new SelectList(_context.AudienceRating, "Id", "Title"); // Populate ratings for dropdown
         return View();                          // Render the Create view
     }
 
     // POST: MOVIES/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Movie movie, IFormFile posterFile) // Poster file upload is handled via IFormFile parameter
+    public async Task<IActionResult> Create(Movie movie, IFormFile? posterFile) // Poster file upload is handled via IFormFile parameter
     {
         // Handles poster file upload if provided
         if (posterFile != null)
@@ -80,8 +74,12 @@ public class MoviesController : Controller
             _context.Add(movie);                        // Add new movie entity to the DbContext
             await _context.SaveChangesAsync();          // Persist changes to the database
             return RedirectToAction(nameof(Index));     // Redirect back to the Index list
-        }                                              
-        ViewBag.Ratings = GetRatings();                // If validation failed, repopulate ratings for the form
+        }
+
+        ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(g => g.Title), "Id", "Title"); // Repopulate genres for dropdown if validation fails
+
+        ViewData["AudienceRatingId"] = new SelectList(_context.AudienceRating, "Id", "Title"); // Repopulate ratings for dropdown if validation fails
+        
         return View(movie);                            // Re-render the Create view with validation messages
     }
 
@@ -98,14 +96,18 @@ public class MoviesController : Controller
         {
             return NotFound();                              // Return 404 Not Found
         }
-        ViewBag.Ratings = GetRatings();                     // Provide rating options to the view
+
+        ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(g => g.Title), "Id", "Title", movie.GenreId); // Populate genres for dropdown with the current genre selected. Alphabetically
+
+        ViewData["AudienceRatingId"] = new SelectList(_context.AudienceRating, "Id", "Title", movie.AudienceRatingId); // Populate ratings for dropdown with the current rating selected
+
         return View(movie);                                 // Render the Edit view with the movie model
     }
 
     // POST: MOVIES/Edit
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, Movie movie, IFormFile posterFile) // poster file upload is handled via IFormFile parameter
+    public async Task<IActionResult> Edit(int? id, Movie movie, IFormFile? posterFile) // poster file upload is handled via IFormFile parameter
     {
         if (id != movie.Id)                                 // Ensure route id matches model id
         {
@@ -139,7 +141,11 @@ public class MoviesController : Controller
             }
             return RedirectToAction(nameof(Index));     // Redirect to Index on success
         }
-        ViewBag.Ratings = GetRatings();                 // Repopulate ratings if validation failed  
+
+        ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(g => g.Title), "Id", "Title", movie.GenreId); // Repopulate genres for dropdown if validation fails
+
+        ViewData["AudienceRatingId"] = new SelectList(_context.AudienceRating, "Id", "Title", movie.AudienceRatingId); // Repopulate ratings for dropdown if validation fails
+
         return View(movie);                             // Re-render Edit view with validation messages
     }
 
@@ -152,6 +158,8 @@ public class MoviesController : Controller
         }
 
         var movie = await _context.Movie                    // Query the movie to display confirmation details
+            .Include(m => m.Genre)          // Display Genre on delete screen
+            .Include(m => m.AudienceRating) // Display rating on delete page
             .FirstOrDefaultAsync(m => m.Id == id);
         if (movie == null)                              // If no id provided
         {

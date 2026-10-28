@@ -10,5 +10,9 @@ namespace MoviesAdmin.Models
         }
 
         public DbSet<Movie> Movie { get; set; }
+
+        public DbSet<Genre> Genre { get; set; }
+
+        public DbSet<AudienceRating> AudienceRating { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 @model IEnumerable<MoviesAdmin.Models.Movie>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Movies Table";
 }
 
 <h1 class="mb-3">Movie Administration</h1>
@@ -18,7 +18,7 @@
 				<th>Poster</th> <!--Poster column -->
                 <th>@Html.DisplayNameFor(model => model.Title)</th>
 			    <th>@Html.DisplayNameFor(model => model.Genre)</th>
-			    <th>@Html.DisplayNameFor(model => model.Rating) </th>
+                <th>@Html.DisplayNameFor(model => model.AudienceRating) </th>
 			    <th>Runtime (Min)</th>
 			    <th> Release Date</th>
             
@@ -37,14 +37,14 @@
                     </td>
 
 	                <td>@Html.DisplayFor(model => item.Title)</td>
-                    <td>@Html.DisplayFor(model => item.Genre)</td>
-                    <td>@Html.DisplayFor(model => item.Rating)</td>
+                    <td>@Html.DisplayFor(model => item.Genre.Title)</td>
+                    <td>@Html.DisplayFor(model => item.AudienceRating.Title)</td>
                     <td>@Html.DisplayFor(model => item.RuntimeMinutes)</td>
                     <td>@Html.DisplayFor(model => item.ReleaseDate)</td>
 
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary me-1 mb-1">Edit</a>        <!--Edit button using Bootstrap classes for styling -->
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1 mb-1">Details</a>     <!-- Details button using Bootstrap classes for styling -->
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary me-2 mb-1">Edit</a>        <!--Edit button using Bootstrap classes for styling -->
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info me-2 mb-1">Details</a>     <!-- Details button using Bootstrap classes for styling -->
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger mb-1">Delete</a>     <!-- Delete button using Bootstrap classes for styling -->
                         </td>
                         <!--me-1/margin-end (right side) & -->

@@ -22,13 +22,6 @@ namespace MoviesAdmin.Controllers
         {
             var movie = new Movie
             {
-                Id = 1,
-                Title = "Inception",
-                Synopsis = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
-                Genre = "Action, Adventure, Sci-Fi",
-                Rating = "PG-13",
-                RuntimeMinutes = 148,
-                ReleaseDate = new DateTime(2010, 7, 16)
             };
 
             return Json(movie);

@@ -1,0 +1,39 @@
+@model MoviesAdmin.Models.AudienceRating
+
+@{
+    ViewData["Title"] = "Edit Audience Rating";
+}
+
+<h1>Edit Audience Rating</h1>
+
+<h4>AudienceRating</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="control-label mb-2">Rating Name</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <!--<div class="form-group">
+                <label asp-for="Movies" class="control-label"></label>
+                <input asp-for="Movies" class="form-control" />
+                <span asp-validation-for="Movies" class="text-danger"></span>
+            </div>-->
+            <div class="form-group mb-3">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-success">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
