@@ -4,10 +4,21 @@
     ViewData["Title"] = "Movie Details";
 }
 
-<h1>Details</h1>
+<h1>Movie Details</h1>
 
 <div class="container">
+
+    @if (User.IsInRole("administrator"))
+    {
+        <p class="text-muted">
+            Manage movie inforamation and users reviews.
+         </p>
+    }
+    
+    <br/>
+
     <h4>Movie</h4>
+
     <hr />
     <dl class="row">
         <!-- Add poster -->
@@ -57,14 +68,75 @@
     
         <dt class = "col-sm-2">
             Release Date
-        
+        </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ReleaseDate)
+        </dd>
+        <dt class="col-sm-2">
+            Published Reviews
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.CriticReviews?.Any(r => r.IsPublished) ?? false)
+            {
+                @foreach (var review in Model.CriticReviews.Where(r => r.IsPublished))
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between">
+                                <strong>Rating: @review.Rating / 5</strong> 
+
+                                <div class="text-end">
+                                    @if (!string.IsNullOrEmpty(review.AuthorPicture))
+                                    {
+                                        <img src="@review.AuthorPicture" class="rounded-circle mb-2" width="40" height="40" />
+                                    }
+                                    <div>
+                                        @review.AuthorName
+                                    </div>
+
+                                </div>
+							</div>
+
+                            <hr />
+
+                            <div class="review-text">
+                                @review.Description
+                            </div>
+
+                            <br />
+
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+
+                                <small class="text-muted">
+                                    Published @review.CreatedDate.ToShortDateString()
+                                </small>
+                                @if (User.IsInRole("administrator"))
+                                {
+                                    <a asp-controller="CriticReviews" asp-action="Delete" asp-route-id="@review.Id" class="btn btn-sm btn-danger">Delete Review</a>
+                                } 
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                } 
+
+            } 
+            else
+            {
+                <p>No published reviews yet.</p>
+            }
         </dd>
     </dl>
 
     <div>
-        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-pr">Edit</a> |
+        @if (User.IsInRole("administrator"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary me-2">Edit</a>
+        }
+        <a asp-controller="CriticReviews" asp-action="Create" asp-route-movieId="@Model?.Id" class="btn btn-warning me-2">Write a Review</a>
         <a asp-action="Index" class="btn btn-success">Back to List</a>
     </div>
 </div>

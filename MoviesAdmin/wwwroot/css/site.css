@@ -34,10 +34,15 @@ body {
 /* Brand colour "MoviesAdmin"*/
 .navbar-brand {
     font-weight: 700;
-    color: lightseagreen !important; /*Colour*/
+    color: #c62828 !important; /*Colour*/
 }
+
+.navbar-brand:hover {
+    color: #e53935 !important;
+}
+
 .navbar {
-    background-color: lightgray !important; /* BG Colour*/
+    background-color: #28C677 !important; /* BG Colour*/
 }
 
 /* Section headers */

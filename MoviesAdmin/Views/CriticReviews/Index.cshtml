@@ -1,0 +1,80 @@
+@model IEnumerable<MoviesAdmin.Models.CriticReview>
+
+@{
+    ViewData["Title"] = "Your Movie Reviews";
+}
+
+<h1>Your Reviews</h1>
+
+<p class="text-muted">
+    Create, manage, and publish your movie reviews.
+</p>
+<p>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
+</p>
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Poster
+                </th>
+                <th>
+					Movie Title
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rating)
+                </th>
+                <th>
+                    Review Status
+                </th>
+                <th>
+					Date Posted
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.Movie?.PosterUrl))
+                        {
+                            <img src="@item.Movie.PosterUrl" class="img-fluid" width="80"/>    
+                        }
+					</td>
+					<td>
+						@item.Movie?.Title
+					</td>
+                    <td>
+                        @Html.DisplayFor(model => item.Rating) /5
+                    </td>
+                    <td>
+                        @if (item.IsPublished)
+                        {
+                            <span class="text-success">Published</span>
+                        }
+                        else
+                        {
+                            <span class="text-warning">Draft</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.CreatedDate)
+                    </td>
+                    <td>
+                        @if (!item.IsPublished)
+                        {
+                            <a asp-action="Publish" asp-route-id="@item.Id" class="btn btn-sm btn-success me-2 mb-1">Publish</a>
+                        }
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info me-2 mb-1">Details </a>
+                        @if (!item.IsPublished)
+                        {
+				            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary me-2 mb-1">Edit</a>
+				            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger me-2 mb-1">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,77 @@
+﻿@model MoviesAdmin.ViewModels.ProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+
+	var picture = Model.ProfilePicture 
+        ?? "/images/default-avatar.png";
+        
+    var nickname = Model.Nickname ?? "User";
+}
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
+                    <h2 class="mb-4">My Profile</h2>
+
+                    <!--Profile Picture-->
+                    <div class="text-center mb-4">
+
+                        <img src="@picture"
+                            alt="Profile Picture"
+                            class="rounded-circle mb-3"
+                            style="width:130px;height:130px;
+                                object-fit:cover;"/>
+
+                        <h4>@nickname</h4>
+
+						<span class="badge bg-primary"> @Model.Role</span>
+                    </div>
+
+                    <hr />
+
+                    <!-- Account Information-->
+
+					<h5 class ="mb-3">Account Information</h5>
+                    <!--Display Name-->
+                    <div class="row mb-3">
+                        <div class="col-4 text-muted">
+                            Display Name
+                        </div>
+
+                        <div class="col-8 text-end">
+                            @nickname
+                        </div>
+                    </div>
+                    <!--Email-->
+                    <div class="row mb-3">
+                        <div class="col-4 text-muted">
+                            Email
+                        </div>
+
+                        <div class="col-8 text-end">
+                            @Model.Email
+                        </div>
+                    </div>
+                    <!--Role-->
+                    <div class="row mb-3">
+                        <div class="col-4 text-muted">
+                            Role
+                        </div>
+
+                        <div class="col-8 text-end">
+                            @Model.Role
+                        </div>
+                    </div>
+
+                </div> <!-- end card body -->
+			</div> <!-- end card -->
+
+		</div> <!-- end col -->
+	</div> <!-- end row -->
+
+</div> <!-- end container -->

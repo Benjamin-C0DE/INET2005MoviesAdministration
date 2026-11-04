@@ -1,0 +1,42 @@
+@model MoviesAdmin.Models.CriticReview
+
+@{
+    ViewData["Title"] = "Create Review";
+}
+
+<h1>Create a Review</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label mb-2"></label>
+                <textarea asp-for="Description" class="form-control mb-3" rows="5"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Rating" class="control-label mb-2"></label>
+                <input asp-for="Rating" type="number" min="1" max="5" class="form-control mb-2" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label mb-2">Movie</label>
+                <input type="text" class="form-control mb-4" value="@ViewBag.MovieTitle" readonly />
+                <input asp-for="MovieId" type="hidden" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary mb-3" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-success mb-3">Back to List</a>
+</div>

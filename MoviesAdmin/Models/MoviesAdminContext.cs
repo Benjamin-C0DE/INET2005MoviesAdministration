@@ -14,5 +14,7 @@ namespace MoviesAdmin.Models
         public DbSet<Genre> Genre { get; set; }
 
         public DbSet<AudienceRating> AudienceRating { get; set; }
+
+        public DbSet<CriticReview> CriticReview { get; set; }
     }
 }

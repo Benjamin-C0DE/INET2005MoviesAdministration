@@ -6,25 +6,45 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to my Movie app</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Spoiled Strawberries</h1>
+	<!--<p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>-->
 </div>
-
 <p>
-    <!---Hello @name!-->
     <br />
     @if (showMessage)
     {
-        <span> This is my first ASP.NET Core MVC Web app.</span>
+        <h3 class="text-center"> Where Movie Opinions Ripen.</h3>
+        <h3 class="text-center">🍓</h3>
     }
     else
     {
         <span>Nothing to say.</span>
     }
+
 </p>
+<br />
+<div>
+    <p>
+		movie review platform where people can share opinions, rate films, and discover what others think before watching.
+    </p>
+    <br />
+    <p>
+        Browse movies, write reviews, publish ratings, and
+        help others decide what's worth watching.
+    </p>
 
-<h2>Home Page</h2>
-
-<ul>
-    <!--<li><a href="/Home/MovieJson">View Movie JSON</a></li>-->
-</ul>
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <br />
+        <p class="text-center">
+            <a asp-controller="Movies" asp-action="Index" class="btn btn-success">Browse Movies</a>
+        </p>
+    }
+    else
+    {
+        <br />
+		<p class="text-center">
+			<a asp-controller="Account" asp-action="Login" class="btn btn-danger"> Login</a>
+        </p>
+    }
+</div>

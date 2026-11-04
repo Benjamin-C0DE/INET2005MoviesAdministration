@@ -26,16 +26,57 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Movies" asp-action="Index">Movies</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Genres" asp-action="Index">Genres</a> <!-- Added link to get to Genre -->
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="AudienceRatings" asp-action="Index">Audience Ratings</a> <!-- Added link to get to Audience Ratings -->
-                        </li>
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Movies" asp-action="Index">Movies</a>
+                            </li>
+
+                            <li class= "nav-item" >
+                                <a class= "nav-link text-dark" asp-controller ="CriticReviews" asp-action ="Index"> My Reviews</a>
+                            </li >
+
+                            @if (User.IsInRole("administrator"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Genres" asp-action="Index">Genres</a> <!-- Added link to get to Genre -->
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="AudienceRatings" asp-action="Index">Audience Ratings</a> <!-- Added link to get to Audience Ratings -->
+								</li>
+							}
+						}
                     </ul>
+					<u1 class="navbar-nav"> <!-- Added user profile and logout links -->
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="Account"
+                                   asp-action="Profile">
+                                    @User.FindFirst("nickname")?.Value
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="Account"
+                                   asp-action="Logout">
+                                    Logout
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="Account"
+                                   asp-action="Login">
+                                    Login
+                                </a>
+                            </li>
+                        }
+                    </u1>
                 </div>
             </div>
         </nav>

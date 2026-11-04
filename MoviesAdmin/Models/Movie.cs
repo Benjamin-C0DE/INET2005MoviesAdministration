@@ -26,6 +26,8 @@ namespace MoviesAdmin.Models
         [DataType(DataType.Date)] // Indicates that this property should be treated as a date
         [ReleaseDateNotInFuture] // Custom validation attribute to ensure the release date is not in the future
         public DateTime ReleaseDate { get; set; } // Release date of the movie
+
         public string? PosterUrl { get; set; } // URL to the movie's poster image, can be null if not provided
+        public ICollection<CriticReview>? CriticReviews { get; set; } = new List<CriticReview>(); // Collection of critic reviews for the movie, can be null if no reviews exist
     }
 }

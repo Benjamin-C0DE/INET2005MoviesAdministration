@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using MoviesAdmin.Models;
 using MoviesAdmin.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 public class MoviesController : Controller
 {
     private readonly MoviesAdminContext _context;
@@ -37,8 +39,9 @@ public class MoviesController : Controller
         }
 
         var movie = await _context.Movie            // Query for the movie with the given id
-            .Include(m => m.Genre)          //Display Genre on delete screen             
-            .Include(m => m.AudienceRating)//Display Rating on delete screen
+            .Include(m => m.Genre)                  //Display Genre on details screen             
+            .Include(m => m.AudienceRating)         //Display Rating on details screen
+            .Include(m => m.CriticReviews)          // Include the related CriticReviews for the movie
             .FirstOrDefaultAsync(m => m.Id == id);
         if (movie == null)                          // If movie not found
         {
@@ -49,6 +52,7 @@ public class MoviesController : Controller
     }
 
     // GET: MOVIES/Create
+    [Authorize(Roles = "administrator")]
     public IActionResult Create()               // GET action to render the Create form
     {
         ViewData["GenreId"] = new SelectList(_context.Genre.OrderBy(g => g.Title), "Id", "Title"); // Populate genres for dropdown. Alphabetically
@@ -58,6 +62,7 @@ public class MoviesController : Controller
     }
 
     // POST: MOVIES/Create
+    [Authorize(Roles = "administrator")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Movie movie, IFormFile? posterFile) // Poster file upload is handled via IFormFile parameter
@@ -84,6 +89,7 @@ public class MoviesController : Controller
     }
 
     // GET: MOVIES/Edit
+    [Authorize(Roles = "administrator")]
     public async Task<IActionResult> Edit(int? id)          // GET action to render the Edit form for a movie
     {
         if (id == null)                                     // If no id provided
@@ -105,6 +111,7 @@ public class MoviesController : Controller
     }
 
     // POST: MOVIES/Edit
+    [Authorize(Roles = "administrator")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int? id, Movie movie, IFormFile? posterFile) // poster file upload is handled via IFormFile parameter
@@ -150,6 +157,7 @@ public class MoviesController : Controller
     }
 
     // GET: MOVIES/Delete
+    [Authorize(Roles = "administrator")]
     public async Task<IActionResult> Delete(int? id) // GET action to confirm deletion of a movie
     {
         if (id == null)                                     // If no id provided
@@ -169,7 +177,8 @@ public class MoviesController : Controller
         return View(movie);                            // Render Delete confirmation view     
     }
 
-    // POST: MOVIES/Delete                                   
+    // POST: MOVIES/Delete
+    [Authorize(Roles = "administrator")]
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)       // POST action that performs the deletion
